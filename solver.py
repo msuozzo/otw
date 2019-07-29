@@ -10,7 +10,7 @@ if __name__ == '__main__':
   parser.add_argument('--min_level',
                       type=int,
                       default=0,
-                      help='The min level to retrieve')
+                      help='The min level to solve')
   parser.add_argument('--start_password',
                       type=str,
                       help='The password of the min level')

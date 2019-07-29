@@ -109,12 +109,12 @@ class AbstractSolver(abc.ABC):
     return password.decode('utf8')
 
   def solve_range(self, min_lvl, max_lvl, min_lvl_password=None):
-    """Solve all levels from `min_lvl` up to and including `max_lvl`."""
-    if max_lvl <= 0:
+    """Solve all levels from `min_lvl` up to `max_lvl`."""
+    if max_lvl < 0:
       raise ValueError('Invalid level number: %d' % max_lvl)
     if min_lvl < 0:
       raise ValueError('Invalid level number: %d' % min_lvl)
     password = min_lvl_password
-    for lvl in range(min_lvl, max_lvl + 1):
+    for lvl in range(min_lvl, max_lvl):
       password = self.solve(lvl, password)
       yield password
