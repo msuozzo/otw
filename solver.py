@@ -5,7 +5,7 @@ import itertools
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(
       description='Automatically collect passwords for OTW levels.')
-  parser.add_argument('wargame', type=str, choices=['leviathan'])
+  parser.add_argument('wargame', type=str, choices=['leviathan', 'narnia'])
   parser.add_argument('max_level', type=int, help='The max level to solve')
   parser.add_argument('--min_level',
                       type=int,

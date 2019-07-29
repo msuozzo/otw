@@ -1,36 +1,11 @@
 """Implementations of solutions for Leviathan OTW levels."""
+import functools
 import textwrap
 
 import solver_util
 
-
-def _get_password_from_shell(meth):
-  """Decorator to extract the password from a set uid shell.
-
-  Many of the level solutions start an interactive set uid shell. The process
-  of extracting the newly-readable password file (that of the next level) is
-  identical once the shell is reached.
-  """
-
-  def wrapped(self, proc):
-    # Hack to get the level number without it being explicitly provided
-    current_level = int(meth.__name__.lstrip('level'))
-
-    # Run the function to start the shell
-    meth(self, proc)
-
-    # Use the shell prompt to get the next password
-    proc.expect(r'\$ ')
-    proc.sendline('cat /etc/leviathan_pass/leviathan%d' % (current_level + 1))
-    proc.expect(r'\$ ')
-    password = proc.before.splitlines()[1]
-
-    # Exit the shell
-    proc.sendeof()
-
-    return password
-
-  return wrapped
+_get_password_from_shell = functools.partial(solver_util.get_password_from_shell,
+        password_file_cbk=lambda lvl: '/etc/leviathan_pass/leviathan%d' % lvl)
 
 
 class Solver(solver_util.AbstractSolver):

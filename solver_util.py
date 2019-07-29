@@ -5,6 +5,43 @@ import abc
 import pexpect
 
 
+def get_password_from_shell(meth, password_file_cbk):
+  """Decorator to extract the password from a set uid shell.
+
+  Many of the level solutions start an interactive set uid shell. The process
+  of extracting the newly-readable password file (that of the next level) is
+  identical once the shell is reached.
+
+  Args:
+    meth: Function, The method to wrap.
+    password_file_cbk: Function[[Int],Str], A callback that returns the path to
+      the password file given the level number.
+
+  Returns:
+    The wrapped method.
+  """
+
+  def wrapped(self, proc):
+    # Hack to get the level number without it being explicitly provided
+    current_level = int(meth.__name__.lstrip('level'))
+
+    # Run the function to start the shell
+    meth(self, proc)
+
+    # Use the shell prompt to get the next password
+    proc.expect(r'\$ ')
+    proc.sendline('cat {}'.format(password_file_cbk(current_level + 1)))
+    proc.expect(r'\$ ')
+    password = proc.before.splitlines()[1]
+
+    # Exit the shell
+    proc.sendeof()
+
+    return password
+
+  return wrapped
+
+
 class AbstractSolver(abc.ABC):
   """An abstract class for solving OTW puzzles.
 
