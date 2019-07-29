@@ -5,7 +5,7 @@ import abc
 import pexpect
 
 
-class AbstractSolver:
+class AbstractSolver(abc.ABC):
 
   @classmethod
   @abc.abstractmethod
