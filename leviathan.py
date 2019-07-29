@@ -1,8 +1,4 @@
-"""Implementations of solutions for Leviathan OTW levels.
-
-Each level function accepts a pexpect spawn instance argument and returns the
-password string for the next level.
-"""
+"""Implementations of solutions for Leviathan OTW levels."""
 import textwrap
 
 import solver_util
@@ -11,10 +7,10 @@ import solver_util
 def _get_password_from_shell(meth):
   """Decorator to extract the password from a set uid shell.
 
-    Many of the level solutions start an interactive set uid shell. The process
-    of extracting the newly-readable password file (that of the next level) is
-    identical once the shell is reached.
-    """
+  Many of the level solutions start an interactive set uid shell. The process
+  of extracting the newly-readable password file (that of the next level) is
+  identical once the shell is reached.
+  """
 
   def wrapped(self, proc):
     # Hack to get the level number without it being explicitly provided
@@ -38,6 +34,7 @@ def _get_password_from_shell(meth):
 
 
 class Solver(solver_util.AbstractSolver):
+  """Solver for the Leviathan OTW levels."""
 
   @classmethod
   def username(cls, level):
@@ -72,7 +69,7 @@ class Solver(solver_util.AbstractSolver):
     return proc.before.splitlines()[2]
 
   def level2_alt(self, proc):
-    """Implements a TOCTOU solutions to level2."""
+    """Implements a TOCTOU solution to level2."""
     proc.sendline(
         textwrap.dedent("""
             exploit() {
