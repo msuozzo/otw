@@ -4,8 +4,9 @@ import textwrap
 
 import solver_util
 
-_get_password_from_shell = functools.partial(solver_util.get_password_from_shell,
-        password_file_cbk=lambda lvl: '/etc/leviathan_pass/leviathan%d' % lvl)
+_get_password_from_shell = functools.partial(
+    solver_util.get_password_from_shell,
+    password_file_cbk=lambda lvl: '/etc/leviathan_pass/leviathan%d' % lvl)
 
 
 class Solver(solver_util.AbstractSolver):
